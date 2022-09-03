@@ -1,3 +1,5 @@
+![axios](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e09b866272164f6ab8a4f8e6980ede96~tplv-k3u1fbpfcp-no-mark:480:480:0:0.awebp?)
+
 在实际开发中，我们经常需要进行网络请求，如果使用原生提供的方法，会存在如下问题：
 
 1. 需要对原生的XHR或fetch进行封装，以方便使用
@@ -20,13 +22,13 @@ axios不仅支持Promise风格API，而且对原生的XHR或fetch进行了扩展
 
 axios支持多种请求方式
 
-+ axios(config) --- 本质就是axios.request(config) 
-+ axios.request(config) 
-+ axios.get(url[, config]) 
-+ axios.delete(url[, config]) 
-+ axios.head(url[, config]) 
-+ axios.post(url[, data[, config]]) 
-+ axios.put(url[, data[, config]]) 
++ axios(config) --- 本质就是axios.request(config)
++ axios.request(config)
++ axios.get(url[, config])
++ axios.delete(url[, config])
++ axios.head(url[, config])
++ axios.post(url[, data[, config]])
++ axios.put(url[, data[, config]])
 + axios.patch(url[, data[, config]])
 + axios.all([]) --- 本质就是Promise.all()
 
@@ -70,7 +72,7 @@ await axios.get('http://www.example.com/lyric', {
 // 当使用axios.post方法的时候，axios会自动将method配置项的值修改为post
 // 参数一 - url地址
 // 参数二- 配置对象
-await axios.post('http://123.207.32.32:1888/02_param/postjson', {
+await axios.post('http://www.example.com:1888/02_param/postjson', {
   // 使用data定义post方法需要传递的参数
   data: {
     id: 500665346
@@ -83,7 +85,7 @@ await axios.post('http://123.207.32.32:1888/02_param/postjson', {
 // 1. 参数一 - url地址
 // 2. 参数二 - 需要传递的data参数
 // 3. 参数三 - 配置对象
-await axios.post('http://123.207.32.32:1888/02_param/postjson', {
+await axios.post('http://www.example.com:1888/02_param/postjson', {
   id: 500665346
 })
 ```
@@ -103,4 +105,183 @@ await axios.post('http://123.207.32.32:1888/02_param/postjson', {
 | URL查询对象            | params:{ id: 12 }                             |
 | request body           | data: { key: 'aa'}                            |
 | 超时设置               | timeout: 1000                                 |
+
+
+
+## 基准路径
+
+```js
+import axios from 'axios'
+
+// 可以通过axios.defaults来配置公共配置
+axios.defaults.baseURL = 'http://www.example.com' // 基准路径
+// 公共头配置信息是一个对象
+// 一般情况下执行的是类似于axios.defaults.headers[token] = 'xxxx’
+// 下述的操作是直接清空对应的请求头信息
+axios.defaults.headers = {} // 公共头信息
+axios.defaults.timeout = 10000 // 超时时间
+
+async function foo() {
+	// axios.all 本质就是 Promise.all
+	const res = await axios.all([
+		axios.get('/home/multidata'),
+		// 如果传入的是全路径地址，那么就是要全路径地址
+		// 如果传入的不是全路径地址，axios内部会通过new URL(传入的路径, baseURL)
+		axios.get('http://api.example.com/lyric?id=500665346')
+	])
+
+	console.log(res)
+}
+
+foo()
+```
+
+
+
+## 创建实例
+
+当我们从axios模块中导入对象时, 使用的实例是默认的实例
+
+当给该实例设置一些默认配置时, 这些配置就被固定下来了
+
+但是后续开发中, 某些配置可能会不太一样, 比如某些请求需要使用特定的baseURL或者timeout等
+
+这个时候, 我们就可以创建新的实例, 并且传入属于该实例的配置信息
+
+```js
+import axios from 'axios'
+
+// 全局的公共配置 --- 也就是针对默认实例的配置
+axios.defaults.baseURL = 'http://www.example.com:8000'
+
+// 针对于某一个特定实例的配置 - 会执行类似于Object.assign(默认配置, 特定配置)的操作
+const api = axios.create({
+  baseURL: 'http://www.example.com:9001',
+  timeout: 10000
+})
+
+async function foo() {
+  const res = await api.get('/lyric?id=500665346')
+  console.log(res.data)
+}
+
+foo()
+```
+
+##
+
+## 拦截器
+
+axios的也可以设置拦截器:拦截每次请求和响应
+
++ axios.interceptors.request.use(请求成功拦截, 请求失败拦截)
++ axios.interceptors.response.use(响应成功拦截, 响应失败拦截)
+
+```js
+import axios from 'axios'
+
+axios.defaults.baseURL = 'http://www.example.com:8000'
+
+const api = axios.create({
+	baseURL: 'http://www.example.com:9001',
+	timeout: 10000
+})
+
+// 对于请求拦截和默认拦截 都有两个参数，分别为请求成功时候的回调和请求失败时候的回调
+// 如果不传，默认函数就是直接将传入的参数原封不动的返回
+
+// 定义请求拦截
+// 一般会在请求拦截中，开启loading动画或者修改配置项(如在header中添加上token等)
+api.interceptors.request.use(config => {
+	console.log('请求拦截成功')
+	// 请求拦截成功的回调
+	// 会将配置信息传递过来，可以对config进行任何想要的修改后
+	// 在返回新的配置信息
+	return config
+}, err => {
+	console.log('请求拦截失败的回调')
+	// 错误回调 会接收错误信息信息作为参数
+	// 在错误回调中可以执行任何所需要的错误处理
+	// 需要返回对应的错误对象
+	return err
+})
+
+// 定义响应拦截
+axios.interceptors.response.use(res => {
+	// 响应拦截成功时候触发的回调函数
+	// 会将结果作为参数传入，需要将处理后结果返回
+	// 在响应拦截成功回调中，经常执行如下操作:
+	// 1. 关闭loading动画
+	// 2，对返回的数据进行处理，如取出其中的data属性后再进行返回
+	return res.data
+}, err => {
+	// 响应拦截错误时候触发的回调函数
+	// 会将错误传入，需要返回经过处理后的错误对象
+	return err
+})
+
+async function foo() {
+	const res = await api.get('/lyric?id=500665346')
+	console.log(res.data)
+}
+
+foo()
+```
+
+
+
+## 简单封装
+
+在实际开发中，在多个组件中都需要进行网络请求，那么就需要在多个组件中都需要使用axios来进行网络请求
+
+这就会导致项目和axios的耦合度，也就是关联度过高，如果哪天axios发生了重大更新或者不维护的时候，需要修改和变动的地方就非常多
+
+所以在实际开发中，会单独对网络请求进行二次封装，也就是在axios和业务逻辑之间添加上单独的一层
+
+这样对于项目业务逻辑而言使用的是自己封装的内容，实际在项目中对于axios的引用只有一处
+
+这样可以减低项目和axios之间的耦合度，便于后续的升级和维护
+
+```js
+import axios from 'axios'
+
+// 对于关联度比较高的属性和方法一般会单独封装成一个类
+// 一般对应的网络请求方法会被封装到src/api文件夹中或src/services文件夹下
+class API {
+	constructor(baseURL = '', config = {}) {
+		this.api = axios.create({ baseURL, ...config })
+	}
+
+	request(config) {
+		return new Promise((resolve, reject) => {
+			this.api.request(config).then(res => resolve(res.data), reject)
+		})
+	}
+
+	get(url, config = {}) {
+		return this.request({
+			url,
+			...config
+		})
+	}
+
+	post(url, dataOrConfig = {}, config = {}) {
+		const data = dataOrConfig.data ? dataOrConfig.data : dataOrConfig
+
+		return this.request({
+			url,
+			data,
+			...config,
+			method: 'post'
+		})
+	}
+}
+
+export default new API('http://www.example.com:9001', {
+	timeout: 10000
+})
+
+export const one = new API('http://www.example.com:1888')
+```
+
 
