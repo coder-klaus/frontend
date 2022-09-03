@@ -1,5 +1,3 @@
-![axios](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e09b866272164f6ab8a4f8e6980ede96~tplv-k3u1fbpfcp-no-mark:480:480:0:0.awebp?)
-
 在实际开发中，我们经常需要进行网络请求，如果使用原生提供的方法，会存在如下问题：
 
 1. 需要对原生的XHR或fetch进行封装，以方便使用
