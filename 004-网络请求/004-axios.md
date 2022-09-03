@@ -263,23 +263,23 @@ class API {
 		})
 	}
 
-	post(url, dataOrConfig = {}, config = {}) {
-		const data = dataOrConfig.data ? dataOrConfig.data : dataOrConfig
+	post(url, dataOrConfig = {}, optionConfig = {}) {
+		const config = dataOrConfig.data ? {...dataOrConfig, ...optionConfig} : { data: dataOrConfig, ...optionConfig }
 
 		return this.request({
 			url,
-			data,
 			...config,
 			method: 'post'
 		})
 	}
 }
 
-export default new API('http://www.example.com:9001', {
+export default new API('http://123.207.32.32:9001', {
 	timeout: 10000
 })
 
-export const one = new API('http://www.example.com:1888')
+export const one = new API('http://123.207.32.32:1888')
+
 ```
 
 
