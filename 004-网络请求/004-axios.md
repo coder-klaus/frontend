@@ -226,8 +226,6 @@ async function foo() {
 foo()
 ```
 
-
-
 ## 简单封装
 
 在实际开发中，在多个组件中都需要进行网络请求，那么就需要在多个组件中都需要使用axios来进行网络请求
@@ -279,7 +277,6 @@ export default new API('http://123.207.32.32:9001', {
 })
 
 export const one = new API('http://123.207.32.32:1888')
-
 ```
 
 
