@@ -5,4 +5,6 @@
 + [组件化开发(一)](./004-%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91(%E4%B8%80).md)
 + [组件化开发(二)](./005-%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91(%E4%BA%8C).md)
 + [组件化开发(三)](./006-%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91(%E4%B8%89).md)
-+ [setState](./007-setState.md)
++ [组件化开发(四)](./007-%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91(%E5%9B%9B).md)
++ [setState](./008-setState.md)
++ [react-transition-group](./009-react-transition-group.md)
