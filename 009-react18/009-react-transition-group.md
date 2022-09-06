@@ -43,7 +43,7 @@ CSSTransition执行过程中，有三个状态:appear、enter、exit
 | ------------- | ------------------------------------------------------------ |
 | in            | 触发进入或者退出状态位<br />当in为true时，触发进入状态，会添加-enter、-enter-acitve的class开始执行动画，<br />当动画执行结束后，会移除两个class， 并且添加-enter-done的class<br />当in为false时，触发退出状态，会添加-exit、-exit-active的class开始执行动画，<br />当动画执行结束后，会移除两个class，并 且添加-enter-done的class |
 | classNames    | 决定了在编写css时，对应的class名称<br />当className的值为card时，对应样式类似于card-enter、card-enter-active、card-enter-done |
-| timeout       | 过渡动画的时间<br />必传项                                   |
+| timeout       | 过渡动画的时间<br />必传项<br />css中设置的是实际动画的执行时间<br />而timeout属性决定的是react-transition-group在什么时间点，<br />为我们添加对应的class样式名<br />在实际使用中推荐将css中动画的执行时间和timeout属性值设置成一致 |
 | appear        | 是否在初次进入添加动画                                       |
 | unmountOnExit | 默认情况下，对应组件并不会被卸载，只是自己通过css属性来隐藏<br />将unmountOnExit的值设置为true的时候，退出后将会卸载对应组件 |
 
@@ -72,6 +72,65 @@ export class App extends PureComponent {
           appear
 				>
 					<div>Hello Wolrd</div>
+				</CSSTransition>
+			</div>
+		)
+	}
+
+	changeState() {
+		this.setState({
+			isShow: !this.state.isShow
+		})
+	}
+}
+
+export default App
+```
+
+
+
+如果在使用上述示例的时候，开启了React.StrictMode
+
+而默认情况下CSSTransition内部使用了findDOMNode方法
+
+而findDOMNode方法在React严格模式下是不被允许的
+
+因此会看控制台看到相应的错误信息
+
+```jsx
+import React, { PureComponent, createRef } from 'react'
+import { CSSTransition } from 'react-transition-group'
+import './style.css'
+
+export class App extends PureComponent {
+	constructor(props) {
+		super(props)
+
+		this.transitionRef = createRef()
+
+		this.state = {
+			isShow: true
+		}
+	}
+
+	render() {
+		return (
+			<div>
+				<button onClick={() => this.changeState()}>click me</button>
+        {/*
+        	CSSTransition支持一个名为nodeRef的属性
+        	nodeRef的值一般是执行动画的根元素的原生DOM节点
+        	当没有设置nodeRef的时候，CSSTransition内部会使用findDOMNode来获取执行动画根节点所对应的原生DOM节点，所以在使用React严格模式的时候，会出现错误警告
+        	当设置了nodeRef对应值的时候，CSSTransition组件就会使用我们所传入的节点作为执行动画的根节点，而不再主动调用findDOMNode方法来获取对应的根节点
+        */}
+				<CSSTransition
+          appear
+					timeout={ 2000 }
+					classNames='fade'
+					in={ this.state.isShow }
+					nodeRef={ this.transitionRef }
+				>
+					<div ref={ this.transitionRef }>Hello Wolrd</div>
 				</CSSTransition>
 			</div>
 		)
