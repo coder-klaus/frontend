@@ -166,3 +166,78 @@ export function connect(mapStateToProps, mapDispatchToProps) {
 	}
 }
 ```
+
+
+
+## 中间件
+
+react的中间件本质上就是对dispatch操作进行拦截，在对派发的操作进行二次处理后，再将处理后的结果实际派发给redux
+
+在拦截后，可以进行任何所需要的自定义操作，从而扩展对应的功能
+
+
+
+需求： 在dispatch之前，打印一下本次的action对象，dispatch完成之后可以打印一下最新的store state
+
+ 也就是我们需要将对应的代码插入到redux的某部分，让之后所有的dispatch都可以包含这样的操作
+
+```js
+import store from './store'
+
+function log(store) {
+	// 该函数本质上就可以看成是一种中间件
+	// 实际调用的看上去是dispatch，但是本质上是dispatchAndLog
+	// 对原本的dispatch方法扩展了打印日志操作后，在调用原本的dispatch方法
+	function dispatchAndLog(action) {
+		console.log('正在派发', action)
+		next(action)
+		console.log('派发结果为', store.getState())
+	}
+
+	// 这种行为被称之为monkey patching 猴补丁
+	// 也就是篡改现有对象，对整体执行逻辑进行修改
+	//
+	const next = store.dispatch
+	store.dispatch = dispatchAndLog
+}
+
+log(store)
+```
+
+
+
+所以 redux-thunk 的 核心代码为
+
+```jsx
+function thunk(store) {
+	const next = store.dispatch
+
+	function dispatchThunk(action) {
+		// 如果传入的是函数，直接调用
+    // 并传入修改后的dispatch --- 方便继续派发函数
+    // 同时传入store.getState函数 --- 方便调用者获取最新state
+    if (typeof action === 'function') {
+			action(store.dispatch, store.getState)
+		} else {
+      // 如果不是函数，是对象形式，直接调用原生派发
+			next(action)
+		}
+	}
+	store.dispatch = dispatchThunk
+}
+
+thunk(store)
+```
+
+
+
+单个调用某个函数来合并中间件并不是特别的方便，我们可以封装一个函数来实现所有的中间件合并:
+
+```jsx
+// 这里之所以需要多传递一个store
+// 是因为redux的applyMiddleWare是直接在createStore的时候传入的参数，其可以直接获取到内部的store
+// 而自己封装无法直接获取到对应的store，所以需要显式的传入
+function applyMiddleWare(store, ...fns) {
+	fns.forEach(fn => fn(store))
+}
+```
