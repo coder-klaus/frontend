@@ -196,7 +196,6 @@ function log(store) {
 
 	// 这种行为被称之为monkey patching 猴补丁
 	// 也就是篡改现有对象，对整体执行逻辑进行修改
-	//
 	const next = store.dispatch
 	store.dispatch = dispatchAndLog
 }

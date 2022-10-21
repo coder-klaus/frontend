@@ -11,7 +11,7 @@
 + [组件补充](./010-%E7%BB%84%E4%BB%B6%E8%A1%A5%E5%85%85.md)
 + [composition api(一)](./011-composition%20api(%E4%B8%80).md)
 + [composition api(二)](./012-composition%20api(%E4%BA%8C).md)
-+ [vue的一些语法补充](./013-vue%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AF%AD%E6%B3%95%E8%A1%A5%E5%85%85.md)
++ [vue3知识点补充](./013-vue3%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A1%A5%E5%85%85.md)
 + [vue-router(一)](./014-vue-router(%E4%B8%80).md)
 + [vue-router(二)](./015-vue-router(%E4%BA%8C).md)
 + [vuex(一)](./016-vuex(%E4%B8%80).md)
