@@ -28,7 +28,7 @@ axios支持多种请求方式
 + axios.post(url[, data[, config]])
 + axios.put(url[, data[, config]])
 + axios.patch(url[, data[, config]])
-+ axios.all([]) --- 本质就是Promise.all()
++ axios.all([]) --- 本质就是Promise.all() --- axios.all 是axios的静态方法，不存在于axios的实例对象上
 
 
 
@@ -166,12 +166,16 @@ async function foo() {
 foo()
 ```
 
+
+
 ## 拦截器
 
 axios的也可以设置拦截器:拦截每次请求和响应
 
 + axios.interceptors.request.use(请求成功拦截, 请求失败拦截)
 + axios.interceptors.response.use(响应成功拦截, 响应失败拦截)
+
+> 拦截器必须在发送请求或接收响应前被设置
 
 ```js
 import axios from 'axios'
@@ -224,57 +228,8 @@ async function foo() {
 foo()
 ```
 
-## 简单封装
-
-在实际开发中，在多个组件中都需要进行网络请求，那么就需要在多个组件中都需要使用axios来进行网络请求
-
-这就会导致项目和axios的耦合度，也就是关联度过高，如果哪天axios发生了重大更新或者不维护的时候，需要修改和变动的地方就非常多
-
-所以在实际开发中，会单独对网络请求进行二次封装，也就是在axios和业务逻辑之间添加上单独的一层
-
-这样对于项目业务逻辑而言使用的是自己封装的内容，实际在项目中对于axios的引用只有一处
-
-这样可以减低项目和axios之间的耦合度，便于后续的升级和维护
-
-```js
-import axios from 'axios'
-
-// 对于关联度比较高的属性和方法一般会单独封装成一个类
-// 一般对应的网络请求方法会被封装到src/api文件夹中或src/services文件夹下
-class API {
-	constructor(baseURL = '', config = {}) {
-		this.api = axios.create({ baseURL, ...config })
-	}
-
-	request(config) {
-		return new Promise((resolve, reject) => {
-			this.api.request(config).then(res => resolve(res.data), reject)
-		})
-	}
-
-	get(url, config = {}) {
-		return this.request({
-			url,
-			...config
-		})
-	}
-
-	post(url, dataOrConfig = {}, optionConfig = {}) {
-		const config = dataOrConfig.data ? {...dataOrConfig, ...optionConfig} : { data: dataOrConfig, ...optionConfig }
-
-		return this.request({
-			url,
-			...config,
-			method: 'post'
-		})
-	}
-}
-
-export default new API('http://123.207.32.32:9001', {
-	timeout: 10000
-})
-
-export const one = new API('http://123.207.32.32:1888')
-```
 
 
+## 封装
+
+[使用TS对axios进行封装](https://juejin.cn/post/7156199343404367880/)
