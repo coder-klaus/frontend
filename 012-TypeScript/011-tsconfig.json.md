@@ -23,7 +23,7 @@
 > ```shell
 > # 会使用tsconfig.json文件
 > tsc
-> 
+>
 > # 此时不会使用tsconfig.json文件
 > tsc <文件>
 > ```
@@ -62,3 +62,141 @@
 | outDir            | 编译后的文件 输出到那个文件夹中                              |
 | resolveJsonModule | 默认情况下，TS并不识别引入的JSON文件<br />开启该选项后，TS可以解析并识别对应的JSON文件<br />也就是说开启该选项后，不仅可以引入对应的JSON文件，而且引入后还可以拥有自己对应的类型 |
 
+
+
+### tslib
+
+typescript在编译为javaScript的时候，具体编译成那个版本的JavaScript是取决于target的
+
+而如果我们使用了比较新的语法，而需要编译成的target比较旧的时候
+
+typescript在转换我们代码的时候就需要降级处理
+
+`目标target为ES5`
+
+`ts`
+
+```ts
+const foo = [1, 2, 3]
+console.log([...foo])
+```
+
+`编译后`
+
+```js
+"use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+var foo = [1, 2, 3];
+console.log(__spreadArray([], foo, true));
+```
+
+
+
+此时如果我们在多个文件中使用了这些“新语法”的时候
+
+`index.ts`
+
+```ts
+import { foo } from './foo'
+
+console.log([...foo])
+```
+
+
+
+`foo.ts`
+
+```ts
+const foo = [1, 2, 3]
+const baz = [...foo]
+
+export {
+  foo
+}
+```
+
+
+
+此时编译后的代码如下
+
+`index.js`
+
+```js
+"use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var foo_1 = require("./foo");
+console.log(__spreadArray([], foo_1.foo, true));
+```
+
+`foo.js`
+
+```js
+"use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+var foo = [1, 2, 3];
+exports.foo = foo;
+var baz = __spreadArray([], foo, true);
+```
+
+
+
+此时发现类似于`__spreadArray`这类的工具函数(也就是执行polyfill功能的函数)
+
+在多个文件中被多次定义，为此typescript提供了一个编译选项`importHelpers`
+
+当开启这个选项的时候，需要结合官方库`tslib`一并使用
+
+`tslib`是typescript把一系列的工具函数抽离并合并导出的库，从而减少编译后的代码量
+
+
+
+在开启importHelpers选项并引入tslib后，再次进行编译，此时工具函数因为被抽离到了tslib中，因此对应的编译后代码会简洁很多
+
+`index.js`
+
+```js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var foo_1 = require("./foo");
+console.log(tslib_1.__spreadArray([], foo_1.foo, true));
+```
+
+`foo.js`
+
+```js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+var tslib_1 = require("tslib");
+var foo = [1, 2, 3];
+exports.foo = foo;
+var baz = tslib_1.__spreadArray([], foo, true);
+```
