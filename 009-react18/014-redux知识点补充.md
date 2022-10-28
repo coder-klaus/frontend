@@ -12,9 +12,7 @@
 
 而Redux Toolkit底层使用了immerjs的一个库来保证数据的不可变性
 
-immer.js 使用了一个新的算法:  Persistent Data Structure(持久化数据结构或一致性数据结构)
-
-即使用一种数据结构来保存数据，当数据被修改时，会返回一个对象，但是新的对象会尽可能的利用之前的数据结构而不会 对内存造成浪费
+immer 实现的算法方式是Persistent Data Structure（持久化数据结构），也就是使用旧数据创建新数据时，要保证旧数据同时可用且不变。同时为了避免 deepCopy 把所有节点都复制一遍带来的性能损耗，Immutable 使用了（结构共享），即如果对象树中一个节点发生变化，只修改这个节点和受它影响的父节点，其它节点则进行共享
 
 ![Persistent Data Structure](https://mmbiz.qpic.cn/mmbiz_gif/O8xWXzAqXuuPtxc2VNSb80zpYnIGMuvn6vRJMGliaqLp8wWNEgKOVutM4vjiaiaGD0iba6tYMQ8DFV8MsYzC7via0bg/640?wx_fmt=gif)
 
@@ -137,16 +135,22 @@ export function connect(mapStateToProps, mapDispatchToProps) {
 
       // 构造方法有第二个参数，为指定的context
 			constructor(props, context) {
-				super(props)
+        super(props)
 
-				this.state = mapStateToProps(context.getState())
-			 }
+        this.unsubscribe = () => {}
 
-			 componentDidMount() {
-				this.context.subscribe(() => {
-					this.setState(mapStateToProps(this.context.getState()))
-				})
-			 }
+        this.state = mapStateToProps(context.getState())
+      }
+
+      componentDidMount() {
+        this.unsubscribe = this.context.subscribe(() => {
+          this.setState(mapStateToProps(this.context.getState()))
+        })
+      }
+
+      componentWillUnmount() {
+        this.unsubscribe()
+      }
 
 			render() {
 				let mapState = {}

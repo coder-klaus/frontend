@@ -201,7 +201,7 @@ Navigate用于路由的重定向，当这个组件出现时，就会执行跳转
 <Routes>
   {/*
 		当路径是/或/home的时候，显示Home组件
-		但是这样本质上会创建两次Homeu组件
+		但是这样本质上会创建两次Home组件
 	*/}
   <Route path="/" element={<Home />} />
   <Route path="/home" element={<Home />} />
@@ -296,7 +296,7 @@ import { useNavigate } from 'react-router-dom'
 export default function withRouter(WrapperedCpn) {
 	return function(props) {
 		// useNavigate是 react-router-dom提供的编程式路由导航API
-		// 而HOC只能在函数式组件中使用，且只能在函数式组件的首层作用域中使用】
+		// 而HOC只能在函数式组件中使用，且只能在函数式组件的首层作用域中使用
 		// 所以如果类组件希望使用react-router6.x的时候，需要自己使用高阶组件进行封装
 		const navigate = useNavigate()
 
@@ -596,5 +596,3 @@ root.render(
   </React.StrictMode>
 );
 ```
-
-

@@ -76,7 +76,7 @@ export class App extends PureComponent {
 		this.unSubscribe = () => {}
 
     // store.subscribe只会在state发生改变的时候才会被调用
-    // 所以初始值需要自己主动去staet中获取
+    // 所以初始值需要自己主动去state中获取
 		this.state = {
 			count: store.getState().count
 		}
