@@ -126,9 +126,9 @@ history模式是调用history接口来实现的
         /*
         	有三个参数:
         	1. 一个对象，可以用于存储一些需要在多个页面中传递的数据，
-        		 可以使用history.state来获取，初始值是null, 
-        		 在使用pusState或replaceState后会变为所传入的值
-        		 
+        		 可以使用history.state来获取，初始值是null,
+        		 在使用pushState或replaceState后会变为所传入的值
+
         	2. 新页面的title，目前浏览器都不支持，保留属性
         	3. 新的网址，必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址
                    (对应的拼接规则和URL的拼接规则一致)
@@ -386,5 +386,6 @@ const router = createRouter({
 export default router
 ```
 
-![image.png](https://www.z4a.net/images/2022/08/25/image.png) 
+![image.png](https://www.z4a.net/images/2022/08/25/image.png)
+
 

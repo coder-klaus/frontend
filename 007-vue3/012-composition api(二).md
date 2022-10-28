@@ -100,7 +100,7 @@ export default {
 
 在setup中使用生命周期钩子，直接导入的 onX 函数注册生命周期钩子
 
-![](https://s3.bmp.ovh/imgs/2022/08/22/8b73b6b0c0c8391c.png) 
+![](https://s3.bmp.ovh/imgs/2022/08/22/8b73b6b0c0c8391c.png)
 
 在composition api中已经没有了beforeCreate和created这两个生命周期钩子，
 
@@ -308,7 +308,7 @@ const stopWatch = watchEffect(() => {
 // 在配置对象中，我们可以改变副作用函数的执行时机
 // 属性flush的默认值为pre，表示的是函数在创建完毕或者更新之前执行
 //                      所以在此时无法操作dom
-// flush的值修改为post后，表示的是函数在挂载完毕或者更新之前执行 
+// flush的值修改为post后，表示的是函数在挂载完毕或者更新之前执行
 //                      所以此时我们可以对dom进行操作
 // flush还支持一个属性 sync，官方不推荐使用，了解即可
 watchEffect(() => {
@@ -397,7 +397,7 @@ export default function useTitle(title = '') {
 
 `<script setup>` 是在单文件组件 (SFC) 中使用组合式 API 的`编译时语法糖`
 
-当同时使用 SFC 与组合式 API 时则推荐该语法: 
+当同时使用 SFC 与组合式 API 时则推荐该语法:
 
 + 更少的样板内容，更简洁的代码
 + 能够使用纯 Typescript 声明 prop 和抛出事件
@@ -437,7 +437,11 @@ import Cpn from './components/Cpn'
 ```vue
 <template>
 	<div>
-
+    <!--
+			defineProps中定义的props在mustache中可以直接使用
+			不需要通过props.name来获取
+		-->
+		{{ name }}
 	</div>
 </template>
 
@@ -467,4 +471,3 @@ defineExpose({
 })
 </script>
 ```
-

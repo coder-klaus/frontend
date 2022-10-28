@@ -10,7 +10,7 @@ Options API的一大特点就是在对应的属性中编写对应的功能模块
 
 为此Vue3提供了Composition Api (简称VCA) 将同一个逻辑关注 点相关的代码收集在一起
 
-![IbrvEO.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/158220a666424cd693a89c0f159feb76~tplv-k3u1fbpfcp-zoom-1.image)  
+![IbrvEO.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/158220a666424cd693a89c0f159feb76~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -28,6 +28,8 @@ options api vs composition api
 为了开始使用Composition API，我们需要有一个可以实际使用它(编写代码)的地方，这个位置就是 setup 函数
 
 `setup函数本质上也是一个vue的option`, 只不过这个选项强大到我们可以用它来替代之前所编写的`大部分`其他选项
+
+setup的执行时机位于beforeCreate和created之间
 
 `tips: 在setup函数中是不绑定this的`
 
@@ -338,7 +340,7 @@ export default function(value, delay = 2000) {
         if (timer) {
           clearTimeout(timer)
         }
-				
+
         // 设置值
         timer = setTimeout(() => {
           value = newValue // 新值覆盖旧值
@@ -482,4 +484,3 @@ export default {
 }
 </script>
 ```
-
