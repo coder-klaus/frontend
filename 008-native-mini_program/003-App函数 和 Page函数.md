@@ -29,10 +29,13 @@ App({
   },
 
   // 关闭小程序后，对应的小程序并不会立即销毁
-  // 而是会在后台存活一段时间，以避免用户重新打开小程序
+  // 而是会在后台存活一段时间，以方便用户在短期内可以快速打开小程序
+  // 首次打开小程序或者销毁后重新打开小程序 被称为 冷启动
+  // 从后台切换到前台 显示的小程序 被称之为 热启动
+  // 一般情况下， 当一个小程序在后台被挂起操作30分钟的时候，就会被销毁
   // 所以在第一次加载小程序的时候，会执行onLaunch回调和onShow回调
   // 而第二次执行小程序的时候，就只会执行onShow回调，onLaunch回调并不会被执行
-  onShow(options) { 
+  onShow(options) {
     // 和onLaunch回调一样，onShow回调也会将对应的事件对象传递过来
     // 在该事件对象中，scene属性 记录着 小程序的进入场景
     console.log(options.scene)
@@ -119,7 +122,6 @@ App({
     const userInfo = wx.getStorageSync('userInfo');
 
     // 因为globaData中的数据并不是响应式的
-    // 且在加载小程序的时候一定是优先加载app.js再去加载对应的page.js
     // 所以在此处并不需要使用setData方法去设置数据
     this.globalData.userInfo = userInfo
   }
@@ -144,7 +146,7 @@ App({
 ### 发送网络请求
 
 ```html
-<!-- 
+<!--
   swiper 和 swiper-item是微信内置的轮播图组件
   image是 微信内置的图片展示组件
 
@@ -153,7 +155,7 @@ App({
 
   swiper属性
   autoplay - 自动轮播
-  circulat - 无限轮播
+  circular - 无限轮播
   indicator-dots - 是否显示指示器
 -->
 <swiper autoplay circular>
@@ -164,10 +166,10 @@ App({
   -->
   <block wx:for="{{ banners }}" wx:key="acm">
     <swiper-item>
-      <!-- 
+      <!--
         image和swiper是小程序的内置组件
         类似于html中对应的可替换元素，image和swiper是拥有默认宽高的，可以通过css来进行修改
-        
+
         image的属性
           mode - 控制图片展示形式 - 类似于object-fit或background-size
             - widthFix 表示的是 根据宽度 自适应 图片的高度
@@ -179,7 +181,7 @@ App({
 ```
 
 ```css
-/* 
+/*
   image 是选择小程序中所有图片的 标签选择器
 */
 image {
@@ -200,7 +202,7 @@ Page({
     wx.request({
       // 请求地址 - 只有在后台配置过白名单的域名才可以被正常请求
       // 在测试的时候，可以在详情 - 本地设置中 关闭域名的合法性校验 以做测试用
-      url: 'http://123.207.32.32:8000/home/multidata',
+      url: 'http://www.example.com/home/multidata',
       // 成功时候的回调 === 推荐使用箭头函数 以获取正确的this
       success: res => {
         this.setData({
@@ -218,5 +220,4 @@ Page({
 
 ## Page生命周期
 
-![image.png](https://s2.loli.net/2022/08/09/kxsNbf1oRpHt7OB.png) 
-
+![image.png](https://s2.loli.net/2022/08/09/kxsNbf1oRpHt7OB.png)
