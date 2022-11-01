@@ -6,6 +6,12 @@
 
 如果是写在`app.wxss`中的样式 即为全局样式
 
+注意:  在wxss中，只能使用网络图片和base64格式的图片，不能使用本地图片
+
+例如background-image中不能使用本地图片作为背景图
+
+
+
 ### rpx
 
 rpx(responsive pixel): 可以根据屏幕宽度进行自适应，规定屏幕宽为750rpx
