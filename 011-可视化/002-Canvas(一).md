@@ -2,7 +2,9 @@ Canvas 最初由Apple于2004 年引入，用于Mac OS X WebKit组件，同时给
 
 后来，它被 Gecko内核的浏览器(尤其是Mozilla Firefox)，Opera和Chrome实现，并被W3C提议为下一代的标准元素(HTML5新增 元素)
 
-Canvas提供了非常多的JavaScript绘图API(比如:绘制路径、矩形、圆、文本和图像等方法)，集合`<canvas>`元素可以绘制各种2D图形
+Canvas提供了非常多的JavaScript绘图API，也就是说canvas的绘制是通过命令式的方式进行绘制的
+
+同这些canvas api 可以将2D图形绘制在canvas元素(画布)上
 
 Canvas API 主要用于绘制 2D 图形。当然也可以使用 Canvas 提供给的 WebGL API 来绘制 3D 图形
 
@@ -34,11 +36,15 @@ SVG 基于 XML， 这意味着 SVG 中的每个元素都是可用，所以对于
 
 ## 基本使用
 
-`<canvas>`除了id, class等公共属性外，`canvas`标签只有两个属性 - width和height( 单位不需要写，默认为px )
+`<canvas>`除了id, class等公共属性外
 
-没宽高时，canvas 会初始化宽为 300px 和高为 150px
+`canvas`标签只有两个属性 - width和height( 单位不需要写，默认为px )
 
-`<canvas>` 元素必须需要结束标签 (`</canvas>`), 如果结束标签不存在，则文档其余部分会被认为是替代内容，将不显示出来
+canvas是是行内替换元素，没宽高时，canvas 会初始化宽为 300px 和高为 150px
+
+`<canvas>` 元素必须需要结束标签 (`</canvas>`)
+
+如果结束标签不存在，则文档其余部分会被认为是替代内容，将不显示出来
 
 ```html
 <canvas id="canvas" width="1000" height="1000">

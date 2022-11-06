@@ -165,7 +165,7 @@ window.onload = () => {
 
   const ctx = canvasEl.getContext('2d')
 
-  // fonßt = value: 当前绘制文本的样式。和 CSS font 属性相同的语法。默认的字体是:10px sans-serif
+  // font = value: 当前绘制文本的样式。和 CSS font 属性相同的语法。默认的字体是:10px sans-serif
   ctx.font = '60px sans-serif'
 
   // textAlign = value:文本对齐选项。可选的值包括:start, end, left, right or center. 默认值是 start

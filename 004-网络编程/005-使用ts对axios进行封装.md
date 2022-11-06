@@ -437,27 +437,26 @@ class API {
 
   // 对于get，post等请求，config参数可以不传递
   get<T>(url: string, config?: RequestConfig<T>) {
-    return this.request<T>({...config, url, method: 'GET'})
+    return this.request<T>({url, ...config, method: 'GET'})
   }
 
   post<T>(url: string, data: IData, config?: RequestConfig<T>) {
-    return this.request<T>({...config, url, data, method: 'POST'})
+    return this.request<T>({url, data, ...config, method: 'POST'})
   }
 
   delete<T>(url: string, config?: RequestConfig<T>) {
-    return this.request<T>({...config, url, method: 'DELETE'})
+    return this.request<T>({url, ...config, method: 'DELETE'})
   }
 
   put<T>(url: string, data: IData, config?: RequestConfig<T>) {
-    return this.request<T>({...config, url, data, method: 'PUT'})
+    return this.request<T>({url, data, ...config, method: 'PUT'})
   }
 
   patch<T>(url: string, data: IData, config?: RequestConfig<T>) {
-    return this.request<T>({...config, url, data, method: 'PATCH'})
+    return this.request<T>({url, data, ...config, method: 'PATCH'})
   }
 }
 
 export default API
 ```
-
 
