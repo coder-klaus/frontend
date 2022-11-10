@@ -309,7 +309,7 @@ export default {
 | isReadonly      | 对象是否是由 readonly 创建的只读代理                         |
 | toRaw           | 返回 reactive 或 readonly 代理的原始对象<br />不建议保留对原始对象的持久引用。请谨慎使用 |
 | shallowReactive | 创建一个响应式代理，它跟踪其自身 property 的响应性<br />但不执行嵌套对象的深层响应式转换 (深层还是原生对象) |
-| shallowRef      | 创建一个 proxy，使其自身的 property 为只读<br />但不执行嵌套对象的深度只读转换(深层还是可读、可写的) |
+| shallowRef      | 创建一个浅层的ref<br />只有修改整个ref值的时候才会触发响应式，修改ref中某个属性值并不会触发对应的响应式 |
 | customRef       | 自定义ref                                                    |
 
 
@@ -389,8 +389,7 @@ export default {
 
 		// 将一个响应式对象转换为一个普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref
     // 每个单独的 ref 都是使用 toRef() 创建的
-    // toRefs 在调用时只会为源对象上可以枚举的属性创建 ref
-    // 如果要为可能还不存在的属性创建 ref，请改用 toRef
+    // toRefs 在调用时只会为源对象上可枚举属性创建 ref
 		const { name, age } = toRefs(userInfo)
 
 		// toRefs相当于已经在state.name和ref.value之间建立了 链接，任何一个修改都会引起另外一个变化

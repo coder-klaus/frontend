@@ -231,8 +231,8 @@ export default {
     // 参数二: 回调函数 用于接收新值和旧值
     //        如果是对象，新值和旧值依旧是一致的
     // 参数三: 配置对象
-    //     默认情况下，watch方法是开启深度监听的
-    //     此外可以设置immediate为true
+    //     deep 是否开启深度监听
+    //     immediate 首次执行时 是否触发watch
     watch(userInfo, (newV, oldV) => {
       console.log(newV, oldV)
     }, {
@@ -252,9 +252,8 @@ export default {
 
 ```js
 // watch的第一个参数也可以是一个回调函数
-// vue会自动收集watch第一个回调函数中的响应式数据为对应依赖
-// 当对应响应式数据发送改变的时候，自动直接回调函数
-// 并将对应结果作为第二个参数的返回值返回
+// vue会自动收集第一个函数中的响应式数据作为对应依赖
+// 当依赖发送改变的时候，自动执行函数，并将对应结果作为第二个参数的返回值返回
 
 // 因为本例中是对数据进行了浅拷贝，所以newV和oldV获取到的是原始数据不是代理对象
 watch(() => ({ ...userInfo.value }), (newV, oldV) => {
@@ -276,8 +275,11 @@ watch([name, age], ([newName, newAge], [oldName, oldAge]) => {
 ```js
 // watch方法返回了一个函数
 // 通过该函数可以终止当前监听函数的执行
+
+// watch所返回的新值和旧值是被自动解包后的值
+// 所以对于对象而言获取到的是proxy值
+// 对于普通数据类型获取到的是普通数据类型本身
 const stopWatch = watch(age, v => {
-  // 对于简单数据类型，watch方法会直接返回对应的原始值
   console.log(v)
   if (v >= 18) {
     stopWatch()

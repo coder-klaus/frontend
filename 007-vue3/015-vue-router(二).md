@@ -84,7 +84,7 @@ router.addRoute({
 
 ```js
 // 动态注册二级路由
-// param1 - 父级路由对象名称
+// param1 - 父级路由对象名称(即路由的name属性值)
 // param2 - 需要注册的子级路由
 router.addRoute('home', {
 	path: 'recommend',
@@ -119,9 +119,7 @@ router.addRoute('home', {
 
    ```js
    const removeRoute = router.addRoute(routeRecord)
-   removeRoute() //册除路由奶果车在的话
-
-
+   removeRoute() //册除路由
 
 `其它方法`
 

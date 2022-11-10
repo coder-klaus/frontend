@@ -114,7 +114,7 @@ createApp(App).use(router).use(store).mount('#app')
   const increment = () => {
     // 在setup函数中获取对应的state值
     // 从vuex中取出的状态是一个proxy代理，所以如果需要获取其中具体的属性，需要使用toRef或toRefs
-    const { counter } = toRefs(store.state.counter)
+    const { counter } = toRefs(store.state)
     console.log(counter)
 
     // 在setup函数中触发对应的mutation
@@ -536,15 +536,4 @@ methods: {
 </script>
 ```
 
-
-
-### 重要原则
-
-在mutations中定义的函数必须是同步函数
-
-因为只有这样，对应的state状态的改变才会被devTools所监听识别
-
-如果是异步函数，需要编写在action中，等待异步函数执行完毕后
-
-在提交一个mutation来修改对应的state
 

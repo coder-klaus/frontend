@@ -4,9 +4,13 @@ vuex将数据状态单独抽离出来进行管理
 
 那也就意味着需要交给vuex管理的状态对应的逻辑就应该放到vuex中进行管理，而不是交给对应的组件
 
-而mutations中只能编写那些同步函数，所以vuex必然需要提供一个选项来让我们进行异步操作
+而mutations有一个非常重要的原则，在mutations中定义的函数必须是同步函数
 
-这个选项就是actions
+因为只有这样，对应的state状态的改变才会被devTools所监听识别
+
+如果是异步函数，需要编写在action中，等待异步函数执行完毕后，再提交一个mutation来修改对应的state
+
+actions的特点:
 
 1. Action提交的是mutation，而不是直接变更状态
 2. Action可以包含任意异步操作, 而mutations不能
