@@ -189,7 +189,7 @@ react在编写界面的时候使用的是JSX（JavaScript XML)
 			constructor(props) {
 				super(props)
 
-				// 不参与界面更新的数据 也就是那些当数据变量时，不需要更新将组建渲染的内容 可以定义在state外部
+				// 不参与界面更新的数据 也就是那些当数据变量时，不需要更新将组件渲染的内容 可以定义在state外部
 				this.notUIData = false
 
 				// 参与界面更新的数据（参与数据流），也就是那些当数据变量时，需要更新组件渲染的内容必须定义在state中

@@ -75,7 +75,7 @@ asyncFn(10).then(count => console.log(count))
 
 ### 状态
 
-![image.png](https://s2.loli.net/2022/06/30/ASmEnj4F8MBL7gu.png)  
+![image.png](https://s2.loli.net/2022/06/30/ASmEnj4F8MBL7gu.png)
 
 一个Promise在执行过程中，存在如下三种状态
 
@@ -343,7 +343,7 @@ asyncFn().then(() => {
   // 在then方法中抛出的异常，会被返回的Promise所捕获
   // 并将异常作为reject的参数被传入，即作为catch方法的参数被传入
   throw new Error('then中抛出的异常')
-}).catch(err => console.log(err)) 
+}).catch(err => console.log(err))
 // catch方法返回的也是一个Promsie
 .then(res => console.log(res))
 /*
@@ -406,6 +406,8 @@ function asyncFn() {
   })
 }
 
+// finally本身返回的也是一个promise
+// 所以从理论角度来讲，可以一直链式下去
 asyncFn().then(res => console.log(res))
   .catch(err => console.log(err))
   .finally(() => console.log('finally'))
@@ -466,7 +468,7 @@ Promise.reject(Promise.resolve('success'))
 
 它的作用是将多个Promise包裹在一起形成一个新的Promise
 
-新的Promise状态由包裹的所有Promise共同决定 
+新的Promise状态由包裹的所有Promise共同决定
 
 + 当所有的Promise状态变成fulfilled状态时，新的Promise状态为fulfilled，并且会将所有Promise的返回值组成一个数组
 + 当有一个Promise状态为reject时，新的Promise状态为reject，并且会将第一个reject的返回值作为参数
@@ -485,7 +487,8 @@ const p3 = new Promise(resolve => {
 })
 
 // 1. Promise.all方法的返回值 也是一个Promise
-// 2. Promise.all方法的参数是由promise实例组成的可迭代对象
+// 2. Promise.all方法的参数需要是一个可迭代对象
+//    如果数组的组成成员并不是promise，那么会使用Promise.resolve对其进行包裹
 // 3. Promise.all的resolve的参数 是一个数组
 //    且数组中值的顺序和返回的先后顺序无关，之和在 Promise.all中传入的顺序有关
 Promise.all([p1, p2, p3]).then(res => console.log('res: ', res))
