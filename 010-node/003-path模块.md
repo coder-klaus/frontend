@@ -1,5 +1,3 @@
-## path
-
 path模块用于对路径和文件进行处理，提供了很多好用的方法
 
 我们知道在Mac OS、Linux和window上的路径时不一样的
@@ -80,7 +78,7 @@ console.log(path.resolve(basename1, filename)) // => /a/foo.js
 // 如果拼接后的路径依旧是相对路径 会和当前命令行执行时候所在的__dirname一起拼接成绝对路径
 console.log(path.resolve(basename2, filename)) // => /Users/klaus/Desktop/demo/foo/c/foo.js
 
-// 路径拼接从右往左执行，一旦拼接的结果是绝对路径 即可停止函数的执行
+// 路径拼接从右往左执行，一旦拼接的结果是绝对路径 即停止函数的执行
 console.log(path.resolve(basename2, basename1, filename)) // => /a/foo.js
 
 // 路径拼接中的空字符串会被忽略
