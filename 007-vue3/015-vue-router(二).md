@@ -181,3 +181,101 @@ router.beforeEach(to => {
 
 ![image.png](https://s2.loli.net/2022/08/27/QNGjrc6CFXwHJsl.png) 
 
+
+
+### 路由前置守卫
+
+挂载在router对象上，匹配路由前会被触发的回调函数
+
+在前置守卫里可以进行权限判断或者跳转操作
+
+```js
+// to - 需要前往的那个路由的路由对象
+// from - 来自于那个路由对应的路由对象
+router.beforeEach((to, from) => {
+  console.log('路由前置守卫')
+  console.log(to, from)
+})
+```
+
+
+
+### 路由后置守卫
+
+挂载在router对象上，匹配路由并渲染完对应组件时候会被触发的回调
+
+在路由后置守卫中，可以执行埋点操作和日志分析
+
+```js
+router.afterEach((to, from) => {
+  console.log('路由后置守卫')
+  console.log(to, from)
+})
+```
+
+
+
+### 路由解析守卫
+
+```js
+// 功能和beforeEach一致
+// 唯一的区别在于 
+//     beforeEach的时候, 实例还没有被创建
+//     beforeResolve的时候, 实例已经被创建了
+router.beforeResolve((to, from) => {
+  console.log('beforeResolve')
+})
+```
+
+
+
+### 路由独享守卫
+
+功能和beforeEach类似，不过是针对于某一个单一的路由对象进行拦截的回调函数
+
+```js
+{
+  path: '/',
+  component: () => import('./views/Home.vue'),
+  beforeEnter(to, from) {
+    console.log(to)
+    console.log(from)
+    console.log('路由发生了拦截')
+  }
+}
+```
+
+
+
+### 组件内守卫
+
+```js
+beforeRouteEnter(to, from) {
+  // 路由匹配到了，需要渲染对应组件之前被回调的守卫函数
+  // 在调用该函数的过程中，因为没有创建对应的组件实例
+  // 所以不能在该函数中使用this关键字
+  // 在composition api中 并没有该函数对应的api
+  // 所以在组合式API中，并不能使用该函数
+}
+```
+
+```js
+import { onBeforeRouteUpdate } from 'vue-router'
+
+// 在当前路由改变，但是该组件被复用时调用
+// 举例来说，对于一个带有动态参数的路径 `/users/:id`
+// 在 `/users/1` 和 `/users/2` 之间跳转的时候
+// 在options api中 该函数可以使用this 但是在组合api中，该函数无法使用对应的this
+onBeforeRouteUpdate((to, from) => {
+  console.log('Foo组件被复用了')
+})
+```
+
+```js
+// 离开该组件时候 会被回调的函数
+// 在options api中 该函数可以使用this 但是在组合api中，该函数无法使用对应的this
+onBeforeRouteLeave((to, from) => {
+  console.log('离开了Foo组件')
+})
+```
+

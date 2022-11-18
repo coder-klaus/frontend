@@ -3,3 +3,7 @@
 + [模块化](./002-%E6%A8%A1%E5%9D%97%E5%8C%96.md)
 + [path模块](./003-path%E6%A8%A1%E5%9D%97.md)
 + [fs模块](./004-fs%E6%A8%A1%E5%9D%97.md)
++ [events模块](./005-events%E6%A8%A1%E5%9D%97.md)
++ [buffer类](./006-buffer%E7%B1%BB.md)
++ [stream](./007-stream.md)
++ [http模块](./008-http%E6%A8%A1%E5%9D%97.md)
