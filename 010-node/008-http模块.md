@@ -262,3 +262,96 @@ const server = http.createServer((req, res) => {
 server.listen(3000, () => console.log('server running🚀'))
 ```
 
+
+
+## 发送请求
+
+http模块不仅仅可以用于搭建服务器，也可以用于在node环境下，发送对应的网络请求
+
+axios在node环境中运行的时候，底层就是基于http模块
+
+```js
+const http = require('http')
+
+http.get('http://localhost:3000', res => {
+  res.on('data', data => {
+    console.log(data.toString())
+  })
+})
+```
+
+```js
+const http = require('http')
+
+// 除了get方法有简写外，其余请求需要使用request方法
+// 参数一 -- 配置对象
+// 参数二 -- 回调 -- 请求成功 返回数据时候会被回调
+const req = http.request({
+  method: 'POST',
+  hostname: 'localhost',
+  port: 3000
+}, res => res.on('data', data => console.log(data.toString())))
+
+// 向服务器 传递对应的请求体
+// get请求 这么做是没有意义的
+req.write('request msg')
+
+// 调用end方法，告诉服务器 请求体传递完成
+// 可以返回对应的数据
+req.end()
+```
+
+
+
+## 文件上传
+
+```js
+const fs = require('fs')
+const http = require('http')
+
+// 上传图片的时候，需要单独取出图片信息
+// 也就是剔除 上传图片时候, 表单中的其它字段和描述信息
+const server = http.createServer((req, res) => {
+  if (req.method === 'POST' && req.url === '/upload') {
+    // 图片视频之类的是二进制编码
+    // 所以读取和设置的时候，需要使用binary来进行读取和解析
+    // 所谓binary就是把一个字节转换为对应的ASCII码后在进行输出
+    req.setEncoding('binary')
+
+    let formDataStr = ''
+
+    // 当表单数据是form/data的时候，字段和字段之间使用 boundary进行分割
+    // boundary会在上传的时候 动态生成
+    // 假设boundary为 xxxx
+    // 那么字段开始的时候 为 --xxxx
+    // 字段结束的时候为 --xxxx--
+    const boundary = req.headers['content-type'].split('boundary=')[1]
+
+    req.on('data', data => formDataStr += data)
+
+    req.on('end', () => {
+      console.log(formDataStr);
+      let imgData = formDataStr.split(boundary).find(str => str.includes('Content-Type: image/'))
+
+      if (imgData) {
+        // 结尾 boundary 会有 -- 结尾 需要取出
+        imgData = imgData.substring(0, imgData.length - 2)
+      }
+
+      const imgType = imgData.match(/Content-Type: image\/(.+)\s\s*/)[1]
+
+      imgData = imgData.split(/Content-Type: image\/.+\s\s*/)[1]
+
+      fs.writeFile(`./avatar.${imgType}`, imgData, 'binary', () => {
+         res.end('upload success')
+      })
+      res.end('end')
+    })
+  }
+})
+
+server.listen(3000, () => {
+  console.log('server running 🚀')
+})
+```
+
