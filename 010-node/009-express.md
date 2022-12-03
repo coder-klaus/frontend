@@ -281,6 +281,7 @@ const express = require('express')
 const multer  = require('multer')
 
 // 创建上传对象 --- 指定上传的文件存在于那个目录下
+// 如果对应的目录不存在 那么对应的目录会被自动创建
 const upload = multer({ dest: 'uploads' })
 
 const app = express()
@@ -444,7 +445,7 @@ app.post('/foo', (req, res) => {
 
 ```js
 app.post('/foo', (req, res) => {
-  // 通过status方法 设置响应状态码
+  // 通过status方法 设置响应状态码 --- 不设置默认值是200
   // 200 - 服务器请求处理成功
   // 201 - 服务器请求处理成功 - 一般用于表示对应的资源已经被创建
   // 202 - 服务器接收了请求，但请求还未被处理
@@ -456,6 +457,130 @@ app.post('/foo', (req, res) => {
     name: 'Klaus',
     age: 23
   })
+})
+```
+
+
+
+## 路由
+
+如果将所有的路由逻辑全部编写在app实例上，那么随着业务的发展，app中的业务逻辑会变得越来越大
+
+另一方面有些处理逻辑其实是一个整体，我们应该将它们放在一起，如对用户进行CRUD等相关操作的路由
+
+此时我们可以使用 express.Router来创建一个路由处理程序，一个Router实例拥有完整的中间件和路由系统
+
+因此，它也被称为 迷你应用程序(mini-app)
+
+`index.js`
+
+```js
+const express = require('express')
+const userRouter = require('./router/useUser')
+
+const app = express()
+
+// 第一个参数是路由前缀，userRouter中的所有路由在请求的时候都会加上该前缀
+app.use('/users', userRouter)
+
+app.listen(3000, () => console.log('server is running 🚀'))
+```
+
+
+
+`userRouter.js`
+
+```js
+const express = require('express')
+
+const userRouter = express.Router()
+
+// GET /users 时候匹配到
+userRouter.get('/', (req, res) => {
+  res.end('get user')
+})
+
+// POST /users/:id 时候匹配到
+userRouter.post('/:id', (req, res) => {
+  res.end('post user, id is ' + req.params.id)
+})
+
+module.exports = userRouter
+```
+
+
+
+## 静态资源
+
+ Node既可以编写动态接口给我们提供对应的服务，也可以作为静态资源服务器，并且express给我们提供了方便部署静态资源的方法
+
+```js
+const express = require('express')
+
+const app = express()
+
+// 假设imgs下存在avatar.png
+// 此时就可以直接通过 localhost:300/avatat.png 去 访问对应的图片资源
+// express.static(目录名) - 返回一个中间件
+app.use(express.static('./imgs'))
+
+// 此时就可以将我们打包后的项目进行部署，因为我们打包后的代码都是静态资源
+// 此时就可以通过 localhost:3000 直接进行访问
+// 访问一个域名的时候 默认情况下 会自动去查找其目录下的index.html
+app.use(express.static('./build'))
+
+app.listen(3000, () => {
+  console.log('server is running 🚀')
+})
+```
+
+
+
+## 错误处理
+
+```js
+const express = require('express')
+
+const app = express()
+
+app.use(express.json())
+
+app.post('/login', (req, res, next) => {
+  const { username, password } = req.body
+
+  if (!username || !password) {
+    next(-1001)
+  } else if (username !== 'Klaus' || password !== 123456) {
+    next(-1002)
+  } else {
+    res.json({
+      code: 0,
+      message: 'login success'
+    })
+  }
+})
+
+// 错误处理中间件
+app.use((err, req, res, next) => {
+  let message = 'unkown error'
+
+  switch(err) {
+    case -1001:
+      message = '信息不全'
+      break
+    case -1002:
+      message = '账号或密码不正确'
+      break
+  }
+
+  res.json({
+    code: err,
+    message
+  })
+})
+
+app.listen(3000, () => {
+  console.log('server is running 🚀')
 })
 ```
 
