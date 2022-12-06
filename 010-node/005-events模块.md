@@ -34,6 +34,8 @@ emitter.off('custom', handler)
 emitter.on('custom', handler)
 
 // 触发事件
+// 事件总线在进行参数传递的时候和vue一样
+// 传递的是对应的参数列表，不是参数对象
 emitter.emit('custom', 'Klaus', 23)
 ```
 

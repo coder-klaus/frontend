@@ -448,7 +448,6 @@ app.post('/foo', (req, res) => {
   // 通过status方法 设置响应状态码 --- 不设置默认值是200
   // 200 - 服务器请求处理成功
   // 201 - 服务器请求处理成功 - 一般用于表示对应的资源已经被创建
-  // 202 - 服务器接收了请求，但请求还未被处理
   res.status(201)
 
   // json方法中可以传入很多的类型:object、array、string、boolean、number、null等
@@ -520,7 +519,7 @@ const express = require('express')
 const app = express()
 
 // 假设imgs下存在avatar.png
-// 此时就可以直接通过 localhost:300/avatat.png 去 访问对应的图片资源
+// 此时就可以直接通过 localhost:300/avatar.png 去 访问对应的图片资源
 // express.static(目录名) - 返回一个中间件
 app.use(express.static('./imgs'))
 

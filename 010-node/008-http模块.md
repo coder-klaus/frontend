@@ -154,7 +154,7 @@ const server = http.createServer((req, res) => {
   const urlObj = url.parse(req.url)
 
   if (urlObj.pathname === '/login') {
-    // 因为req是读取了，所以获取到的数据默认是buffer流
+    // 因为req是读取流，所以获取到的数据默认是buffer流
     // 除了toString方法和encoding配置对象外
     // 对于req对象，还可以通过调用其setEncoding方法来设置请求体的编码方式
     req.setEncoding('utf-8')
@@ -224,7 +224,7 @@ const server = http.createServer((req, res) => {
   //  浏览器 - 采用系统编码格式 - 中文一般是GBK - 所以会出现乱码
 
   // 所以对于返回的数据 需要自己设置对应的头信息
-  // 1. 请求头的key 可以是全小写单词加中划线组成，也可以使用小驼峰单词加中划线组成 - setHeader方法内部会统一转换
+  // 1. 请求头的key 可以是全小写单词加中划线组成，也可以首字母大写，中划线连接的多个单词组成 - setHeader方法内部会统一转换
   // 2. charset中 utf-8 === utf8
   // 3. 编码格式 需要设置成content-type的值 且文本类型不能省略, 字符编码类型可以省略
   //    Content-Type: 文本类型;[字符编码类型]
@@ -330,7 +330,6 @@ const server = http.createServer((req, res) => {
     req.on('data', data => formDataStr += data)
 
     req.on('end', () => {
-      console.log(formDataStr);
       let imgData = formDataStr.split(boundary).find(str => str.includes('Content-Type: image/'))
 
       if (imgData) {
