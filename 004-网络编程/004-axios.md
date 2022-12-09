@@ -232,4 +232,4 @@ foo()
 
 ## 封装
 
-[使用TS对axios进行封装](https://juejin.cn/post/7156199343404367880/)
+[使用TS对axios进行封装](./005-%E4%BD%BF%E7%94%A8ts%E5%AF%B9axios%E8%BF%9B%E8%A1%8C%E5%B0%81%E8%A3%85.md)

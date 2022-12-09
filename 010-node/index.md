@@ -11,3 +11,4 @@
 + [koa](./010-koa.md)
 + [mysql - 基础操作](./011-mysql%20-%20%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C.md)
 + [mysql - 高级操作](./012-mysql%20-%20%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C.md)
++ [在node中操作mysql](./013-%E5%9C%A8node%E4%B8%AD%E6%93%8D%E4%BD%9Cmysql.md)

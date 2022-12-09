@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS t_users (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(20) UNIQUE NOT NULL,
 	level INT DEFAULT(0), # DEFAULT(0) === DEFAULT 0
-	phone VARCHAR(20), UNIQUE # UNIQUE在不设置NOT NULL的时候，默认值就是NULL
+	phone VARCHAR(20) UNIQUE, # UNIQUE在不设置NOT NULL的时候，默认值就是NULL
 	create_time TIMESTAMP DEFAULT(CURRENT_TIMESTAMP), # 默认值是当前时间戳
   # 默认值是当前时间戳，当数据发生更新的时候，使用最新的时间戳作为对应的最新值
 	update_time TIMESTAMP DEFAULT(CURRENT_TIMESTAMP) ON UPDATE CURRENT_TIMESTAMP
@@ -275,7 +275,7 @@ SELECT id AS prodId, title productName FROM products;
 SELECT * FROM products WHERE price > 4000;
 
 # 逻辑运算符 && and || or
-SELECT * FROM products WHERE brand === '华为' || brand === '小米';
+SELECT * FROM products WHERE brand = '华为' || brand = '小米';
 
 SELECT * FROM products WHERE price BETWEEN 2000 AND 4000;
 
