@@ -221,6 +221,7 @@ module.exports = {
         // 用于对 resource（资源）进行匹配的，通常会设置成正则表达式
         test: /\.css$/,
         // 对应的值时一个数组：[UseEntry]
+        // 如果只有一个值的时候 可以使用 [UseEntry] 或 UseEntry
         use: [
           // UseEntry是一个对象，可以通过对象的属性来设置一些其他属性
           // 例如通过options属性来传入对应的参数
@@ -763,5 +764,99 @@ resolve: {
       '@': path.resolve(__dirname, '/src')
     }
 }
+```
+
+
+
+## 浏览器兼容性
+
+在开发中，我们需要去处理兼容性问题，针对不同的浏览器支持的特性: 比如css特性、js语法，进行不同的适配
+
+那么我们就需要一个工具，单独来查询浏览器适配问题，并将适配信息在多个工具之间进行共享这些信息
+
+这个工具就是`browserslist`, 他会去使用其依赖的包`caniuse-lite`去[caniuse](https://link.juejin.cn/?target=https%3A%2F%2Fcaniuse.com%2Fusage-table)网站上查询浏览器的兼容性情况
+
+随后在所有需要进行浏览器兼容性适配的工具之间共享浏览器兼容性数据
+
+`browserslist的默认配置如下`，详细规则参考[browserslist配置规则](https://github.com/browserslist/browserslist)
+
+当postcss或babel在进行代码适配的时候，就会通过browserslist去查找对应所需要适配的浏览器列表
+
+1. postcss和babel在安装的时候，默认会将browserslist作为其对应依赖进行安装
+2. 如果没有配置browserslist规则，那么就会使用browserslist的默认规则去进行适配
+
+```js
+> 0.5%
+last 2 versions
+Firefox ESR
+not dead
+```
+
+| 常见配置项         | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| > 0.5%             | 市场份额大于0.5%的浏览器<br />还可以`>=，>, <和<=`一起使用   |
+| last 2 versions    | 最后两个版本                                                 |
+| Firefox ESR        | Firefox专门为企业或组织创建的浏览器                          |
+| not dead           | 某一个浏览器如果官方24个月没有发布任何新的版本，那么就认为这个浏览器已经不维护了，也就是说是dead<br />not dead 就意味着24个月内该浏览器有进行升级和维护 |
+| node 10和node 10.4 | 需要兼容node10.x，node10.4.x 版本的浏览器                    |
+| ie > 8             | 需要兼容ie8以上的浏览器                                      |
+| not ie <= 8        | 需要兼容ie8以上的浏览器                                      |
+
+| 关系符             | 说明                 |
+| ------------------ | -------------------- |
+| or 或 逗号 或 换行 | 并集，表示或的关系   |
+| and                | 交集， 表示并的关系  |
+| not                | 取反，表示非集的关系 |
+
+
+
+#### 在命令行使用
+
+```shell
+# 没有查询条件，查看有没有配置文件，有就使用配置文件，没有就使用内置的默认配置
+$ npx browserslist
+
+# 查询的时候，使用查询条件来进行查询
+# 多个条件之间使用逗号进行隔开
+$ npx browserslist ">1%, last 2 version, not dead"
+```
+
+
+
+#### 结合webpack进行使用
+
+`配置方式1 --- package.json`
+
+```json
+"browserslist": [
+  "> 1%",
+  "last 2 versions",
+  "not dead"
+]
+```
+
+```json
+"browserslist": {
+  "development": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+
+  "production": [
+    "> 0.5%",
+    "not dead"
+  ]
+}
+```
+
+
+
+`置方式2 --- 在项目根目录下新建.browserslistrc`
+
+```shell
+> 2%
+last 2 versions
+not dead
 ```
 

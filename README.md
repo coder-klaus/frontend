@@ -14,3 +14,4 @@ Personal front-end learning notes
 + [node](./010-node/index.md)
 + [可视化](./011-可视化/index.md)
 + [TypeScript](./012-TypeScript/index.md)
++ [Svelte](./013-Svelte/index.md)
