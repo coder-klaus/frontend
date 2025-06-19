@@ -1,0 +1,37 @@
+Node中的事件循环
+setImmediate等
+
+socket 和 http 底层都是基于TCP
+
++ TCP 底层传输的是字节流，也就是一个个字节
+
+
+
+coderwhy 手写脚手架工具
+
+
+
+next => 548
+
+
+
+517 待看 没有看
+
+node --watch
+
+node:url 使用
+
+
+
+跨域和解决方法
+
+JWT 和 OAuth
+
+socket
+
+
+
+cookie的获取和使用
+
+XSS 和 CSRF
+
