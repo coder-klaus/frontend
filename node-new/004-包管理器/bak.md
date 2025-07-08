@@ -1,13 +1,12 @@
 npmrc
 
+@xxx/yyy
 
 
-pnpm 可以省略run
-
-pnpm dlx
 
 
+
+git workflow
 
 husky
 
-npm link 

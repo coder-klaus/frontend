@@ -54,8 +54,6 @@ connection.end();
 
 node --inspect app.js
 
-符号链接分为软链接和硬链接
-
 node中的定时器
 
 + setInterval
